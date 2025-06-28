@@ -1,4 +1,4 @@
-# flutter_openai
+# Flutter_CoachScottAI
 
 A new Flutter project.
 
