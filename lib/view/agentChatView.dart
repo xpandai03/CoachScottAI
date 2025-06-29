@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:glassmorphism_ui/glassmorphism_ui.dart';
 import 'dart:io';
 
+import '../controllers/OpenAIServiceHandler.dart';
+
 class AgentChatView extends StatefulWidget {
   const AgentChatView({super.key});
   @override
@@ -193,19 +195,45 @@ class _AgentChatViewState extends State<AgentChatView> {
   }
 
   void sendStarterMessage() {
-    if (_controller.text.isEmpty) return;
+    final trimmed = _controller.text.trim();
+    if (trimmed.isEmpty) return;
+
+    final userMsg = ChatMessage(trimmed, true);
+
     setState(() {
-      messages.add(ChatMessage(_controller.text, true));
+      messages.add(userMsg);
       hasStartedChat = true;
-      _controller.clear();
+    });
+
+    _controller.clear();
+
+    // Simulate agent reply
+    OpenAIServiceHandler.instance.sendMessage(userMsg.text).then((reply) {
+      final agentMsg = ChatMessage(reply, false);
+      setState(() {
+        messages.add(agentMsg);
+      });
     });
   }
 
   void sendChatMessage() {
-    if (_controller.text.isEmpty) return;
+    final trimmed = _controller.text.trim();
+    if (trimmed.isEmpty) return;
+
+    final userMsg = ChatMessage(trimmed, true);
+
     setState(() {
-      messages.add(ChatMessage(_controller.text, true));
-      _controller.clear();
+      messages.add(userMsg);
+    });
+
+    _controller.clear();
+
+    // Simulate agent reply
+    OpenAIServiceHandler.instance.sendMessage(userMsg.text).then((reply) {
+      final agentMsg = ChatMessage(reply, false);
+      setState(() {
+        messages.add(agentMsg);
+      });
     });
   }
 

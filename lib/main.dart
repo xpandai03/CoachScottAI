@@ -3,8 +3,12 @@ import 'package:flutter_openai/view/agentChatView.dart';
 import 'package:flutter_openai/view/previewCanvasView.dart';
 import 'package:flutter_openai/view/settingsView.dart';
 import 'package:glassmorphism_ui/glassmorphism_ui.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() {
+void main() async {
+  await dotenv.load(fileName: ".env");
+  print(
+      'Environment loaded. API Key available: ${dotenv.env['OPENAI_API_KEY']?.isNotEmpty ?? false}');
   runApp(const MyApp());
 }
 
