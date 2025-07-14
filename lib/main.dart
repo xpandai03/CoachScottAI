@@ -2,9 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_openai/view/agentChatView.dart';
 import 'package:flutter_openai/view/previewCanvasView.dart';
 import 'package:flutter_openai/view/settingsView.dart';
+import 'package:flutter_openai/view/voiceChatView.dart';
+import 'package:flutter_openai/view/voiceRecordUI.dart';
 import 'package:glassmorphism_ui/glassmorphism_ui.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:path_provider/path_provider.dart';
 
-void main() {
+void main() async {
+  await dotenv.load(fileName: ".env");
+  print(
+      'Environment loaded. API Key available: ${dotenv.env['OPENAI_KEY']?.isNotEmpty ?? false}');
   runApp(const MyApp());
 }
 
@@ -15,13 +22,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'LiquidGlassApp',
+      title: 'Flutter_OpenAI',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
             seedColor: const Color.fromARGB(255, 31, 10, 67)),
         useMaterial3: true,
       ),
       home: const MainTabView(),
+      // home: const VoiceRecordUI(),
     );
   }
 }
@@ -38,7 +46,8 @@ class _MainTabViewState extends State<MainTabView> {
 
   final List<Widget> pages = [
     const AgentChatView(),
-    const Center(child: Text('Voice Chat View')),
+    // const Center(child: Text('Voice Chat View')),
+    const VoiceChatView(),
     const PreviewCanvasView(),
     const SettingsView(),
     // const Center(child: Text('Agent Chat View')),
